@@ -36,6 +36,52 @@ export async function rawToScaled(section: Section, raw: number): Promise<number
   return best.scaled;
 }
 
+/* ============================================================================
+   ESTIMATE BANDS
+
+   The app never shows a single score number for a mock. A point value like
+   "1280" reads as a fact and gets remembered as one, however it is labelled —
+   and it isn't a fact. Two sources of error stack up here:
+
+     1. This test is linear. The real SAT routes you into an easier or harder
+        second module and scores with item response theory, so WHICH questions
+        you answered correctly changes the result.
+     2. These are original questions written to the published spec, not
+        calibrated College Board items.
+
+   A band is the honest representation, and it still shows progress across
+   several attempts, which is the only thing a practice score is good for.
+   ========================================================================= */
+
+export const ESTIMATE_MARGIN_TOTAL = 50;
+export const ESTIMATE_MARGIN_SECTION = 30;
+
+export interface ScoreBand {
+  low: number;
+  high: number;
+}
+
+export function scoreBand(
+  scaled: number,
+  margin: number,
+  min: number,
+  max: number,
+): ScoreBand {
+  const round10 = (n: number) => Math.round(n / 10) * 10;
+  return {
+    low: Math.max(min, round10(scaled - margin)),
+    high: Math.min(max, round10(scaled + margin)),
+  };
+}
+
+export const totalBand = (scaled: number): ScoreBand =>
+  scoreBand(scaled, ESTIMATE_MARGIN_TOTAL, 400, 1600);
+
+export const sectionBand = (scaled: number): ScoreBand =>
+  scoreBand(scaled, ESTIMATE_MARGIN_SECTION, 200, 800);
+
+export const formatBand = (b: ScoreBand): string => `${b.low}–${b.high}`;
+
 export interface DomainBreakdown {
   domain_id: string;
   correct: number;

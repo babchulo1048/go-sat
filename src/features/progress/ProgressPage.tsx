@@ -24,6 +24,7 @@ import {
   scoreHistory,
 } from "@/lib/stats";
 import { formatDate } from "@/lib/format";
+import { formatBand, totalBand } from "@/lib/scoring";
 import { cn } from "@/lib/utils";
 import { DomainAccuracyBars, EmptyState, SectionHeading } from "@/components/common";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -102,12 +103,12 @@ export function ProgressPage() {
     <div className="space-y-8">
       {/* --------------------------------------------------- score history */}
       <section>
-        <SectionHeading>Estimated score over time</SectionHeading>
+        <SectionHeading>Practice estimate over time</SectionHeading>
         {data.scores.length < 2 ? (
           <div className="rounded-xl border border-border bg-surface p-4">
             <p className="text-sm text-muted-foreground">
-              {data.scores.length === 1
-                ? `One mock so far: ${data.scores[0]!.total}. A single score carries roughly ±30–40 points of noise — the trend only becomes readable across three or more.`
+              {data.scores.length === 1 && data.scores[0]!.total != null
+                ? `One mock so far: ${formatBand(totalBand(data.scores[0]!.total!))}. A single result carries a lot of noise — the trend only becomes readable across three or more.`
                 : "Take a full mock to start the trend line."}
             </p>
           </div>
@@ -155,6 +156,12 @@ export function ProgressPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
+
+            <p className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
+              Practice estimates, accurate to roughly ±30 points per section — read the
+              direction, not the individual points. Your real score comes from a
+              full-length test in Bluebook.
+            </p>
           </div>
         )}
       </section>

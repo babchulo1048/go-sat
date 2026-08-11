@@ -10,6 +10,7 @@ import {
   loadEnrichedAnswers,
 } from "@/lib/stats";
 import { dayKey, formatDate } from "@/lib/format";
+import { formatBand, totalBand } from "@/lib/scoring";
 import { useSettings } from "@/hooks/useSettings";
 import { GoalRing, SectionHeading, StatTile } from "@/components/common";
 import { Button } from "@/components/ui/button";
@@ -98,9 +99,17 @@ export function HomePage() {
 
       <div className="grid grid-cols-3 gap-3">
         <StatTile
-          label="Latest score"
-          value={data.latest?.scaled_total ?? "—"}
-          hint={data.latest ? "estimated" : "no mock yet"}
+          label="Latest"
+          value={
+            data.latest?.scaled_total != null ? (
+              <span className="text-[17px] leading-tight">
+                {formatBand(totalBand(data.latest.scaled_total))}
+              </span>
+            ) : (
+              "—"
+            )
+          }
+          hint={data.latest ? "practice estimate" : "no mock yet"}
           tone="brand"
         />
         <StatTile label="This week" value={data.week} hint="questions" />

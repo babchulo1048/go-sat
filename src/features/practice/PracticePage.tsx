@@ -5,6 +5,7 @@ import { ChevronRight, Clock, ListChecks } from "lucide-react";
 import { db } from "@/lib/db";
 import { getTests } from "@/lib/repo";
 import { formatDuration, formatPercent } from "@/lib/format";
+import { formatBand, totalBand } from "@/lib/scoring";
 import { cn } from "@/lib/utils";
 import { EmptyState, SectionHeading } from "@/components/common";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -138,6 +139,31 @@ export function PracticePage() {
       {mocks.length > 0 && (
         <section>
           <SectionHeading>Full mock tests</SectionHeading>
+
+          {/*
+            Placed ABOVE the mock cards on purpose. The single biggest way this
+            app could do harm is if a practice estimate gets mistaken for a real
+            SAT level and drives real decisions.
+          */}
+          <div className="mb-3 rounded-xl border border-border bg-surface-2 p-3.5">
+            <p className="text-sm font-medium">Use these for practice, not to measure.</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              These questions are original and the test isn't adaptive, so the result is
+              an estimate — never a real score. Take your{" "}
+              <strong className="font-medium text-foreground">real mock tests</strong> in
+              College Board's free{" "}
+              <a
+                href="https://bluebook.collegeboard.org/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-brand underline underline-offset-2"
+              >
+                Bluebook app
+              </a>{" "}
+              on a laptop or tablet. That's the only place a score means anything.
+            </p>
+          </div>
+
           <div className="space-y-2.5">
             {mocks.map((c) => (
               <TestCard key={c.test.id} data={c} />
@@ -200,7 +226,7 @@ function TestCard({ data }: { data: TestCardData }) {
           {attemptCount > 0 && (
             <span className="tnum">
               {best !== null
-                ? `Best: ${best}`
+                ? `Best: ${formatBand(totalBand(best))}`
                 : lastAccuracy !== null
                   ? `Last: ${formatPercent(lastAccuracy)}`
                   : null}

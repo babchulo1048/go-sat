@@ -3,7 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { CheckCircle2, ChevronRight, CircleSlash, HelpCircle, XCircle } from "lucide-react";
 import { db, type LocalAnswer, type LocalAttempt } from "@/lib/db";
 import { getAnswers, getAttempt, getTest } from "@/lib/repo";
-import { scoreAttempt, type AttemptScore } from "@/lib/scoring";
+import {
+  formatBand,
+  scoreAttempt,
+  sectionBand,
+  totalBand,
+  type AttemptScore,
+} from "@/lib/scoring";
 import { getDomainMap } from "@/lib/stats";
 import { formatDuration, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -94,30 +100,35 @@ export function ResultsPage() {
         <section className="rounded-xl border border-border bg-surface p-5 text-center">
           <div className="flex items-center justify-center gap-1.5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-              Estimated score
+              Practice estimate
             </p>
             <EstimateExplainer />
           </div>
-          <p className="mt-1 text-5xl font-semibold tnum text-brand">
-            {score.scaledTotal}
+          <p className="mt-1 text-[40px] font-semibold leading-tight tnum text-brand">
+            {formatBand(totalBand(score.scaledTotal))}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground tnum">out of 1600</p>
+          <p className="mx-auto mt-2 max-w-xs text-xs leading-relaxed text-muted-foreground">
+            This is not an SAT score. Bluebook gives your real one.
+          </p>
 
           <div className="mt-5 grid grid-cols-2 gap-3">
-            {(["rw", "math"] as Section[]).map((s) => (
-              <div key={s} className="rounded-lg bg-surface-2 p-3">
-                <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-muted-foreground">
-                  {SECTION_LABEL[s]}
-                </p>
-                <p className="mt-0.5 text-2xl font-semibold tnum">
-                  {score.scaledBySection[s] ?? "—"}
-                </p>
-                <p className="text-xs text-muted-foreground tnum">
-                  {score.rawBySection[s]?.correct ?? 0} / {score.rawBySection[s]?.total ?? 0}{" "}
-                  correct
-                </p>
-              </div>
-            ))}
+            {(["rw", "math"] as Section[]).map((s) => {
+              const scaled = score.scaledBySection[s];
+              return (
+                <div key={s} className="rounded-lg bg-surface-2 p-3">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.05em] text-muted-foreground">
+                    {SECTION_LABEL[s]}
+                  </p>
+                  <p className="mt-0.5 text-lg font-semibold tnum">
+                    {scaled !== undefined ? formatBand(sectionBand(scaled)) : "—"}
+                  </p>
+                  <p className="text-xs text-muted-foreground tnum">
+                    {score.rawBySection[s]?.correct ?? 0} /{" "}
+                    {score.rawBySection[s]?.total ?? 0} correct
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </section>
       ) : (
@@ -265,20 +276,29 @@ function EstimateExplainer() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Why "estimated"?</DialogTitle>
+          <DialogTitle>Why a range, not a score?</DialogTitle>
           <DialogDescription className="space-y-3 pt-2 text-left">
             <span className="block">
-              The real SAT is adaptive: how you do on the first module decides how hard
-              the second one is, and your score depends on which questions you got
-              right — not just how many.
+              <span className="font-medium text-foreground">The real SAT is adaptive.</span>{" "}
+              How you do on the first module decides how hard your second one is, and your
+              score depends on <em>which</em> questions you got right — not just how many.
+              This test is a fixed set, so it can't reproduce that.
             </span>
             <span className="block">
-              This test is a fixed set, so its score is a reasonable approximation, not a
-              prediction. Treat it as a direction of travel.
+              <span className="font-medium text-foreground">
+                These questions are original.
+              </span>{" "}
+              They're written to College Board's published specification, but they aren't
+              real SAT items and aren't calibrated like them.
+            </span>
+            <span className="block">
+              So a single number would be false precision. The range is the honest
+              version — and across several attempts it still shows whether you're
+              improving, which is all a practice score is good for.
             </span>
             <span className="block font-medium text-foreground">
-              For a score you can trust, take a full-length test in College Board's
-              Bluebook app.
+              For a score you can actually trust, take a full-length test in College
+              Board's free Bluebook app.
             </span>
           </DialogDescription>
         </DialogHeader>
