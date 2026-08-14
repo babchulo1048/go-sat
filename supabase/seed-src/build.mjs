@@ -7,6 +7,8 @@ import { createHash } from "node:crypto";
 import { DOMAINS, SKILLS, scaleFor } from "./taxonomy.mjs";
 import { MOCK_RW_1, MOCK_RW_2 } from "./mock-rw.mjs";
 import { MOCK_MATH_1, MOCK_MATH_2 } from "./mock-math.mjs";
+import { MOCK2_RW_1, MOCK2_RW_2 } from "./mock2-rw.mjs";
+import { MOCK2_MATH_1, MOCK2_MATH_2 } from "./mock2-math.mjs";
 import { DRILLS } from "./drills.mjs";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "seed");
@@ -45,8 +47,58 @@ function orderQuestions(list, section) {
   return copy.map((c) => c.item);
 }
 
-function questionSql(testSlug, partId, partSection, list) {
-  const ordered = orderQuestions(list, partSection);
+/**
+ * Rotate each question's choices so the correct answer lands in a target slot,
+ * cycling A, B, C, D down the module.
+ *
+ * Without this the key skews badly — authoring naturally puts the correct
+ * answer first — which lets a student score above chance by always guessing A
+ * and trains nothing. The other three choices keep their relative order, and
+ * any "Choice X" reference inside the explanation is remapped to match.
+ *
+ * Only applied to tests that opt in, so already-seeded tests keep the answers
+ * students have already been scored against.
+ */
+const LETTERS = ["A", "B", "C", "D"];
+
+function balanceChoices(x, idx) {
+  if (x.type !== "mc") return x;
+  const from = LETTERS.indexOf(x.ans);
+  if (from < 0) return x;
+  const to = idx % 4;
+
+  // Correct answer takes the target slot; the rest fill the gaps in order.
+  const others = x.choices.filter((_, i) => i !== from);
+  const rearranged = [];
+  let k = 0;
+  for (let slot = 0; slot < 4; slot++) {
+    rearranged[slot] = slot === to ? x.choices[from] : others[k++];
+  }
+
+  // old letter -> new letter, for rewriting the explanation
+  const map = {};
+  map[LETTERS[from]] = LETTERS[to];
+  let j = 0;
+  for (let slot = 0; slot < 4; slot++) {
+    if (slot === to) continue;
+    const originalIndex = x.choices.indexOf(others[j]);
+    map[LETTERS[originalIndex]] = LETTERS[slot];
+    j++;
+  }
+
+  // Matches only "Choice X" / "Choices X and Y" — never cos(A) or angle A.
+  const exp = x.exp.replace(
+    /\b([Cc]hoices?) ([A-D])(( and )([A-D]))?/g,
+    (_m, word, a, _pair, joiner, b) =>
+      b ? `${word} ${map[a]}${joiner}${map[b]}` : `${word} ${map[a]}`,
+  );
+
+  return { ...x, choices: rearranged, ans: LETTERS[to], exp };
+}
+
+function questionSql(testSlug, partId, partSection, list, balance) {
+  let ordered = orderQuestions(list, partSection);
+  if (balance) ordered = ordered.map(balanceChoices);
   return ordered
     .map((x, idx) => {
       const id = uuid(`${testSlug}:${partId}:${idx + 1}`);
@@ -59,7 +111,7 @@ function questionSql(testSlug, partId, partSection, list) {
     .join("\n");
 }
 
-function testSql({ slug, title, subtitle, test_type, section_scope, focus, difficulty, description, sort, parts }) {
+function testSql({ slug, title, subtitle, test_type, section_scope, focus, difficulty, description, sort, parts, balanceAnswers }) {
   const testId = uuid(`test:${slug}`);
   const lines = [
     `insert into public.tests (id, slug, title, subtitle, test_type, section_scope, focus_domain_id, difficulty, description, sort_order) values (${q(testId)}, ${q(slug)}, ${q(title)}, ${q(subtitle)}, ${q(test_type)}, ${q(section_scope)}, ${q(focus ?? null)}, ${q(difficulty)}, ${q(description)}, ${sort}) on conflict (slug) do nothing;`,
@@ -69,7 +121,7 @@ function testSql({ slug, title, subtitle, test_type, section_scope, focus, diffi
     lines.push(
       `insert into public.test_parts (id, test_id, part_index, title, section, duration_seconds) values (${q(partId)}, ${q(testId)}, ${i + 1}, ${q(p.title)}, ${q(p.section)}, ${p.duration}) on conflict (test_id, part_index) do nothing;`,
     );
-    lines.push(questionSql(slug, partId, p.section, p.questions));
+    lines.push(questionSql(slug, partId, p.section, p.questions, balanceAnswers));
   });
   return lines.join("\n") + "\n";
 }
@@ -114,6 +166,34 @@ const mock = {
 };
 writeFileSync(join(OUT, "10_full_mock_1.sql"), testSql(mock));
 
+// ---- 11 full mock 2 --------------------------------------------------------
+// Harder than Mock 1, which tested too easy in Math. Calibrated against the
+// hard end of College Board's official Practice Test 4 and written as the
+// UPPER adaptive path — the harder second module a student scoring in the
+// 1300s would actually be routed into on the real test.
+const mock2 = {
+  slug: "full-mock-2",
+  title: "Full Mock 2",
+  subtitle: "Harder practice test — upper adaptive path",
+  test_type: "full_mock",
+  section_scope: "both",
+  focus: null,
+  difficulty: "hard",
+  description:
+    "Four timed parts: two Reading and Writing modules of 27 questions and two Math modules of 22 questions. Pitched harder than Mock 1, matching the difficulty of the second module you would be routed into after a strong first module.",
+  sort: 2,
+  // Mock 1 is deliberately NOT balanced: it is already seeded and her recorded
+  // attempt was scored against those answers.
+  balanceAnswers: true,
+  parts: [
+    { title: "Reading and Writing — Module 1", section: "rw", duration: 32 * 60, questions: MOCK2_RW_1 },
+    { title: "Reading and Writing — Module 2", section: "rw", duration: 32 * 60, questions: MOCK2_RW_2 },
+    { title: "Math — Module 1", section: "math", duration: 35 * 60, questions: MOCK2_MATH_1 },
+    { title: "Math — Module 2", section: "math", duration: 35 * 60, questions: MOCK2_MATH_2 },
+  ],
+};
+writeFileSync(join(OUT, "11_full_mock_2.sql"), testSql(mock2));
+
 // ---- 20..33 drills ---------------------------------------------------------
 for (const d of DRILLS) {
   writeFileSync(
@@ -141,18 +221,41 @@ for (const d of DRILLS) {
 }
 
 // ---- sanity checks ---------------------------------------------------------
-const mockCount = mock.parts.reduce((n, p) => n + p.questions.length, 0);
 const problems = [];
-if (mockCount !== 98) problems.push(`Full Mock 1 has ${mockCount} questions, expected 98`);
-mock.parts.forEach((p, i) => {
-  const expected = p.section === "rw" ? 27 : 22;
-  if (p.questions.length !== expected)
-    problems.push(`Part ${i + 1} has ${p.questions.length}, expected ${expected}`);
-});
+let mockCount = 0;
+for (const m of [mock, mock2]) {
+  const n = m.parts.reduce((acc, p) => acc + p.questions.length, 0);
+  mockCount += n;
+  if (n !== 98) problems.push(`${m.title} has ${n} questions, expected 98`);
+  m.parts.forEach((p, i) => {
+    const expected = p.section === "rw" ? 27 : 22;
+    if (p.questions.length !== expected)
+      problems.push(`${m.title} part ${i + 1} has ${p.questions.length}, expected ${expected}`);
+  });
+  // Official domain weightings, per module.
+  const WANT = { rw: { craft_structure: 8, information_ideas: 7, standard_conventions: 7, expression_ideas: 5 },
+                 math: { algebra: 8, advanced_math: 8, psda: 3, geometry_trig: 3 } };
+  m.parts.forEach((p, i) => {
+    const counts = {};
+    p.questions.forEach((x) => (counts[x.d] = (counts[x.d] ?? 0) + 1));
+    for (const [dom, want] of Object.entries(WANT[p.section]))
+      if ((counts[dom] ?? 0) !== want)
+        problems.push(`${m.title} part ${i + 1}: ${dom} has ${counts[dom] ?? 0}, expected ${want}`);
+  });
+  // Student-produced responses should be roughly a quarter of Math.
+  const mathQs = m.parts.filter((p) => p.section === "math").flatMap((p) => p.questions);
+  const spr = mathQs.filter((x) => x.type === "spr").length;
+  if (spr < 9 || spr > 13)
+    problems.push(`${m.title} has ${spr} SPR math questions, expected 9-13 (~25% of 44)`);
+}
 for (const d of DRILLS)
   if (d.questions.length < 8) problems.push(`${d.slug} has only ${d.questions.length} questions`);
 const skillIds = new Set(SKILLS.map((s) => s[0]));
-const all = [...mock.parts.flatMap((p) => p.questions), ...DRILLS.flatMap((d) => d.questions)];
+const all = [
+  ...mock.parts.flatMap((p) => p.questions),
+  ...mock2.parts.flatMap((p) => p.questions),
+  ...DRILLS.flatMap((d) => d.questions),
+];
 for (const x of all) {
   if (x.s && !skillIds.has(x.s)) problems.push(`unknown skill ${x.s}`);
   if (!x.exp || x.exp.length < 60) problems.push(`weak explanation: ${x.prompt.slice(0, 50)}`);
@@ -164,4 +267,4 @@ if (problems.length) {
   console.error("SEED PROBLEMS:\n" + problems.join("\n"));
   process.exit(1);
 }
-console.log(`OK — mock ${mockCount} questions, ${DRILLS.length} drills, ${all.length} total.`);
+console.log(`OK — 2 mocks (${mockCount} questions), ${DRILLS.length} drills, ${all.length} total.`);
