@@ -182,22 +182,41 @@ export async function saveAnswer(params: {
   flagged?: boolean;
 }): Promise<void> {
   const { attemptId, question, selected, addSeconds = 0, flagged } = params;
-  const existing = await getAnswerFor(attemptId, question.id);
 
-  const row: LocalAnswer = {
-    id: existing?.id ?? newId(),
-    attempt_id: attemptId,
-    question_id: question.id,
-    selected,
-    is_correct: checkAnswer(question, selected),
-    seconds_spent: (existing?.seconds_spent ?? 0) + Math.max(0, Math.round(addSeconds)),
-    was_flagged: flagged ?? existing?.was_flagged ?? false,
-    error_category: existing?.error_category ?? null,
-    _dirty: DIRTY,
-    _answeredAt: Date.now(),
-  };
+  /*
+   * The read-then-write MUST be atomic.
+   *
+   * The runner calls this from two places that can overlap: selecting an
+   * answer (fire-and-forget) and navigating away (awaited). Without a
+   * transaction both calls saw "no existing row", minted different ids, and
+   * wrote two local rows for the same question. Locally harmless — but the
+   * server has a unique constraint on (attempt_id, question_id), so the batch
+   * upsert 409s and sync stays broken forever after. Dexie serialises
+   * transactions on the same table, which closes the race.
+   */
+  await db.transaction("rw", db.answers, async () => {
+    const existing = await db.answers
+      .where("attempt_id")
+      .equals(attemptId)
+      .and((a) => a.question_id === question.id)
+      .first();
 
-  await db.answers.put(row);
+    const row: LocalAnswer = {
+      id: existing?.id ?? newId(),
+      attempt_id: attemptId,
+      question_id: question.id,
+      selected,
+      is_correct: checkAnswer(question, selected),
+      seconds_spent: (existing?.seconds_spent ?? 0) + Math.max(0, Math.round(addSeconds)),
+      was_flagged: flagged ?? existing?.was_flagged ?? false,
+      error_category: existing?.error_category ?? null,
+      _dirty: DIRTY,
+      _answeredAt: Date.now(),
+    };
+
+    await db.answers.put(row);
+  });
+
   requestSync();
 }
 

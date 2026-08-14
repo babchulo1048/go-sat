@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Check, CloudOff, RefreshCw } from "lucide-react";
+import { AlertTriangle, Check, CloudOff, RefreshCw } from "lucide-react";
 import { useOnline, useSyncStatus } from "@/hooks/useOnline";
+import { syncNow } from "@/lib/sync";
 
 /**
  * Deliberately quiet. Offline is a normal state for this app, not an error, so
@@ -29,6 +30,24 @@ export function SyncIndicator({ className = "" }: { className?: string }) {
         <CloudOff className="size-3.5" aria-hidden />
         Offline — your work is saved
       </span>
+    );
+  }
+
+  /*
+   * A stuck sync must not look like a working one. Previously any pending
+   * count rendered as "Saving 49…" with a spinner forever, so a permanently
+   * failing upload was indistinguishable from a slow one — which is how a
+   * whole mock's answers and notes went missing without anyone noticing.
+   */
+  if (status === "error") {
+    return (
+      <button
+        onClick={() => void syncNow()}
+        className={`inline-flex items-center gap-1.5 text-xs font-medium text-warning ${className}`}
+      >
+        <AlertTriangle className="size-3.5" aria-hidden />
+        {pending > 0 ? `${pending} not saved` : "Not saved"} — retry
+      </button>
     );
   }
 
