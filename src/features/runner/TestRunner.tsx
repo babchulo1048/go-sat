@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Eye, EyeOff, LayoutGrid, X } from "lucide-react";
+import { Calculator, Eye, EyeOff, LayoutGrid, X } from "lucide-react";
 import {
   abandonAttempt,
   completeAttempt,
@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { QuestionCard } from "@/features/runner/QuestionCard";
 import { ReviewSheet } from "@/features/runner/ReviewSheet";
 import { BreakScreen } from "@/features/runner/BreakScreen";
+import { CalculatorSheet } from "@/features/runner/CalculatorSheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -50,6 +51,7 @@ export function TestRunner() {
     () => loadSettings().timerVisibleByDefault,
   );
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [calcOpen, setCalcOpen] = useState(false);
   const [exitOpen, setExitOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -403,6 +405,18 @@ export function TestRunner() {
             <LayoutGrid className="size-4" aria-hidden />
           </Button>
 
+          {/* The real SAT allows a calculator on every Math question. */}
+          {part.section === "math" && (
+            <Button
+              variant="outline"
+              className="h-11 px-3"
+              onClick={() => setCalcOpen(true)}
+              aria-label="Open calculator"
+            >
+              <Calculator className="size-4" aria-hidden />
+            </Button>
+          )}
+
           <Button
             variant="outline"
             className="h-11 flex-1"
@@ -423,6 +437,10 @@ export function TestRunner() {
           </Button>
         </div>
       </div>
+
+      {part.section === "math" && (
+        <CalculatorSheet open={calcOpen} onOpenChange={setCalcOpen} />
+      )}
 
       <ReviewSheet
         open={sheetOpen}
