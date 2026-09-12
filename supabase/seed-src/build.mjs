@@ -137,12 +137,14 @@ writeFileSync(join(OUT, "00_domains_skills.sql"), sql);
 
 // ---- 01 score conversions --------------------------------------------------
 sql =
-  "-- Approximate. The real SAT uses item response theory and adaptive routing; this app cannot reproduce it.\n" +
-  "comment on table public.score_conversions is 'Approximate. The real SAT uses item response theory and adaptive routing; this app cannot reproduce it.';\n";
+  "-- Derived from College Board official scoring guides for paper practice tests 4-11,\n" +
+  "-- averaged across all eight forms and resampled to our 54 RW / 44 Math question counts.\n" +
+  "-- DO UPDATE, not DO NOTHING: this deliberately replaces the earlier invented curve.\n" +
+  "comment on table public.score_conversions is 'Midpoint of the official College Board bands from practice tests 4-11, resampled to this app''s question counts. Still an estimate: these tests are linear, the real SAT is adaptive.';\n";
 for (let r = 0; r <= 54; r++)
-  sql += `insert into public.score_conversions (section, raw_score, scaled) values ('rw', ${r}, ${scaleFor(r, 54)}) on conflict (section, raw_score) do nothing;\n`;
+  sql += `insert into public.score_conversions (section, raw_score, scaled) values ('rw', ${r}, ${scaleFor(r, 54)}) on conflict (section, raw_score) do update set scaled = excluded.scaled;\n`;
 for (let r = 0; r <= 44; r++)
-  sql += `insert into public.score_conversions (section, raw_score, scaled) values ('math', ${r}, ${scaleFor(r, 44)}) on conflict (section, raw_score) do nothing;\n`;
+  sql += `insert into public.score_conversions (section, raw_score, scaled) values ('math', ${r}, ${scaleFor(r, 44)}) on conflict (section, raw_score) do update set scaled = excluded.scaled;\n`;
 writeFileSync(join(OUT, "01_score_conversions.sql"), sql);
 
 // ---- 10 full mock ----------------------------------------------------------

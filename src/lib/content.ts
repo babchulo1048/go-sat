@@ -81,6 +81,30 @@ export async function syncContent(
   report(5, STEPS[5].label);
   const conversions = await fetchAll<ScoreConversion>("score_conversions");
 
+  /*
+   * Never let a thin or empty server response destroy a working local cache.
+   *
+   * The refresh replaces content wholesale, so if the server returns nothing —
+   * because the schema was recreated empty, a seed has not been run yet, or a
+   * request half-failed — the naive path clears IndexedDB and writes nothing,
+   * leaving her locked out of an app that was working offline a moment before.
+   *
+   * This actually happened: the hosted database was wiped in September 2026,
+   * and the only surviving copy of her work was the one on her phone.
+   */
+  const cachedQuestions = await db.questions.count();
+  if (questions.length === 0 && cachedQuestions > 0) {
+    throw new Error(
+      "Server returned no questions; keeping the existing offline copy.",
+    );
+  }
+  if (cachedQuestions > 0 && questions.length < cachedQuestions / 2) {
+    throw new Error(
+      `Server returned only ${questions.length} questions but ${cachedQuestions} are cached; ` +
+        "refusing to replace the offline copy.",
+    );
+  }
+
   await db.transaction(
     "rw",
     [db.domains, db.skills, db.tests, db.parts, db.questions, db.conversions],

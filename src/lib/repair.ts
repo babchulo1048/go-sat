@@ -60,3 +60,51 @@ export async function dedupeAnswers(): Promise<number> {
     return removed;
   });
 }
+
+/**
+ * Recompute stored scores on completed attempts.
+ *
+ * `attempts.scaled_*` is written once when an attempt finishes, but the
+ * Results screen recomputes live from the answers. When the conversion table
+ * changes — as it did when the invented curve was replaced with College
+ * Board's official one — those two disagree: Home and Progress would keep
+ * showing the old inflated number while Results showed the corrected one.
+ *
+ * This rescores any completed attempt whose stored total no longer matches,
+ * and marks it dirty so the correction syncs. Runs on launch; a no-op once
+ * everything agrees.
+ */
+export async function recomputeCompletedScores(): Promise<number> {
+  const { scoreAttempt } = await import("@/lib/scoring");
+  const completed = await db.attempts.where("status").equals("completed").toArray();
+
+  let changed = 0;
+  for (const attempt of completed) {
+    const score = await scoreAttempt(attempt.id);
+
+    // Nothing to rescore if the answers never made it onto this device.
+    if (score.total === 0) continue;
+
+    const next = {
+      raw_rw: score.rawBySection.rw?.correct ?? null,
+      raw_math: score.rawBySection.math?.correct ?? null,
+      scaled_rw: score.scaledBySection.rw ?? null,
+      scaled_math: score.scaledBySection.math ?? null,
+      scaled_total: score.scaledTotal,
+    };
+
+    const same =
+      attempt.raw_rw === next.raw_rw &&
+      attempt.raw_math === next.raw_math &&
+      attempt.scaled_rw === next.scaled_rw &&
+      attempt.scaled_math === next.scaled_math &&
+      attempt.scaled_total === next.scaled_total;
+    if (same) continue;
+
+    await db.attempts.put({ ...attempt, ...next, _dirty: 1 as Dirty });
+    changed += 1;
+  }
+
+  if (changed > 0) console.warn(`[repair] rescored ${changed} completed attempt(s)`);
+  return changed;
+}

@@ -51,9 +51,43 @@ export const SKILLS = [
 
 // Approximate raw -> scaled conversion. Roughly linear, slightly compressed at
 // the top and the bottom (a smoothstep blended 25% into a straight line).
+/**
+ * Raw -> scaled conversion, derived from College Board's OFFICIAL scoring
+ * guides for paper practice tests 4 through 11.
+ *
+ * Method: the lower and upper bound of every raw score was read from all eight
+ * official guides and averaged, which smooths the real form-to-form variation
+ * (20-60 points at the same raw score). The official tables cover 66 Reading
+ * and Writing questions and 54 Math; our tests have 54 and 44, so each raw
+ * score is mapped by PROPORTION correct onto the official curve and
+ * interpolated. The stored value is the midpoint of the official band.
+ *
+ * This replaced a hand-invented smoothstep formula that was inflating scores
+ * by up to 60 points per section in the middle of the range — precisely where
+ * most students sit. It is still an estimate: these are linear tests, and the
+ * real SAT is adaptive.
+ *
+ * Index = number of correct answers.
+ */
+export const RW_SCALE = [
+  200, 210, 210, 210, 210, 220, 230, 240, 250, 260,
+  270, 280, 300, 310, 330, 340, 350, 360, 370, 380,
+  390, 400, 410, 420, 430, 440, 450, 460, 470, 480,
+  490, 500, 510, 520, 530, 550, 560, 570, 580, 600,
+  610, 620, 630, 650, 660, 670, 690, 700, 720, 730,
+  740, 750, 770, 780, 800
+];
+
+export const MATH_SCALE = [
+  200, 210, 210, 220, 220, 230, 250, 270, 300, 320,
+  340, 350, 360, 370, 380, 380, 390, 400, 410, 420,
+  430, 440, 460, 470, 490, 500, 510, 530, 540, 550,
+  570, 580, 600, 610, 630, 640, 660, 680, 700, 720,
+  740, 760, 780, 790, 800
+];
+
 export function scaleFor(raw, max) {
-  const x = raw / max;
-  const smooth = 3 * x * x - 2 * x * x * x;
-  const f = 0.75 * x + 0.25 * smooth;
-  return Math.round((200 + 600 * f) / 10) * 10;
+  const table = max === 54 ? RW_SCALE : MATH_SCALE;
+  const i = Math.max(0, Math.min(raw, table.length - 1));
+  return table[i];
 }
