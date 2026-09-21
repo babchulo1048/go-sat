@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { QuestionCard } from "@/features/runner/QuestionCard";
 import { ReviewSheet } from "@/features/runner/ReviewSheet";
 import { BreakScreen } from "@/features/runner/BreakScreen";
-import { CalculatorSheet } from "@/features/runner/CalculatorSheet";
+import { CalculatorPanel } from "@/features/runner/CalculatorSheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -34,6 +34,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import type { Question, Test, TestPart } from "@/types/db";
+
+const CALC_HINT_KEY = "sat.calcHintSeen";
 
 export function TestRunner() {
   const { attemptId = "" } = useParams();
@@ -52,6 +54,21 @@ export function TestRunner() {
   );
   const [sheetOpen, setSheetOpen] = useState(false);
   const [calcOpen, setCalcOpen] = useState(false);
+  const [showCalcHint, setShowCalcHint] = useState(() => {
+    try {
+      return localStorage.getItem(CALC_HINT_KEY) !== "1";
+    } catch {
+      return true;
+    }
+  });
+  const markCalcHintSeen = () => {
+    setShowCalcHint(false);
+    try {
+      localStorage.setItem(CALC_HINT_KEY, "1");
+    } catch {
+      /* private mode — the hint just shows again next time */
+    }
+  };
   const [exitOpen, setExitOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -319,7 +336,7 @@ export function TestRunner() {
   const isLastPart = runner.part_index >= parts.length - 1;
 
   return (
-    <div className="min-h-dvh bg-background">
+    <div className={cn("min-h-dvh bg-background", calcOpen && "md:pr-[min(480px,48vw)]")}>
       {/* ---------------------------------------------------- top bar */}
       <header className="pt-safe sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-2 px-3">
@@ -339,6 +356,27 @@ export function TestRunner() {
               Question {runner.question_index + 1} of {questions.length}
             </p>
           </div>
+
+          {/* Like Bluebook: the calculator lives in the top bar on every Math question. */}
+          {part.section === "math" && (
+            <button
+              onClick={() => {
+                setCalcOpen((o) => !o);
+                markCalcHintSeen();
+              }}
+              aria-pressed={calcOpen}
+              aria-label={calcOpen ? "Close calculator" : "Open calculator"}
+              className={cn(
+                "inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[13px] font-medium transition-colors",
+                calcOpen
+                  ? "border-brand bg-brand-soft text-brand"
+                  : "border-border text-foreground hover:border-border-strong",
+              )}
+            >
+              <Calculator className="size-4" aria-hidden />
+              <span className="hidden sm:inline">Calculator</span>
+            </button>
+          )}
 
           {remainingSeconds !== null ? (
             <button
@@ -378,7 +416,24 @@ export function TestRunner() {
       </header>
 
       {/* ---------------------------------------------------- question */}
-      <main className="mx-auto w-full max-w-3xl px-4 pt-5 pb-32">
+      {part.section === "math" && showCalcHint && !calcOpen && (
+        <div className="mx-auto mt-3 flex w-full max-w-3xl items-center gap-2 px-4">
+          <p className="flex-1 rounded-lg bg-brand-soft px-3 py-2 text-xs text-brand">
+            Tap <strong>Calculator</strong> at the top for Desmos — the same graphing calculator
+            as the real SAT.
+          </p>
+          <button onClick={markCalcHintSeen} aria-label="Dismiss" className="grid size-8 place-items-center text-muted-foreground">
+            <X className="size-4" aria-hidden />
+          </button>
+        </div>
+      )}
+
+      <main
+        className={cn(
+          "mx-auto w-full max-w-3xl px-4 pt-5 pb-32",
+          calcOpen && "max-md:pb-[72dvh]",
+        )}
+      >
         {currentQuestion ? (
           <QuestionCard
             question={currentQuestion}
@@ -405,17 +460,6 @@ export function TestRunner() {
             <LayoutGrid className="size-4" aria-hidden />
           </Button>
 
-          {/* The real SAT allows a calculator on every Math question. */}
-          {part.section === "math" && (
-            <Button
-              variant="outline"
-              className="h-11 px-3"
-              onClick={() => setCalcOpen(true)}
-              aria-label="Open calculator"
-            >
-              <Calculator className="size-4" aria-hidden />
-            </Button>
-          )}
 
           <Button
             variant="outline"
@@ -439,7 +483,7 @@ export function TestRunner() {
       </div>
 
       {part.section === "math" && (
-        <CalculatorSheet open={calcOpen} onOpenChange={setCalcOpen} />
+        <CalculatorPanel open={calcOpen} onClose={() => setCalcOpen(false)} />
       )}
 
       <ReviewSheet
