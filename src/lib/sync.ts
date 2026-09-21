@@ -30,6 +30,13 @@ const STALE_RUN_MS = 60_000;
 /** Batch size — keeps any single request small on a poor connection. */
 const CHUNK = 200;
 
+/**
+ * Set when Supabase reports the det_responses table does not exist yet (its
+ * migration has not been run). Those rows then wait quietly on the device
+ * instead of turning the whole sync indicator into an error. Cleared on reload.
+ */
+let detTableMissing = false;
+
 const listeners = new Set<(s: SyncStatus, pending: number) => void>();
 
 export function onSyncChange(fn: (s: SyncStatus, pending: number) => void) {
@@ -43,12 +50,13 @@ async function emit(status: SyncStatus) {
 }
 
 export async function pendingCount(): Promise<number> {
-  const [a, b, c] = await Promise.all([
+  const [a, b, c, d] = await Promise.all([
     db.attempts.where("_dirty").equals(1).count(),
     db.answers.where("_dirty").equals(1).count(),
     db.notes.where("_dirty").equals(1).count(),
+    detTableMissing ? Promise.resolve(0) : db.detResponses.where("_dirty").equals(1).count(),
   ]);
-  return a + b + c;
+  return a + b + c + d;
 }
 
 /** Strip local-only bookkeeping fields before sending a row upstream. */
@@ -166,6 +174,31 @@ export async function syncNow(): Promise<boolean> {
   } catch (err) {
     console.warn("[sync] notes failed", err);
     failed = true;
+  }
+
+  // ------------------------------------------------------------ DET responses
+  if (!detTableMissing) {
+    try {
+      const rows = await db.detResponses.where("_dirty").equals(1).toArray();
+      for (const batch of chunk(rows, CHUNK)) {
+        const { error } = await supabase
+          .from("det_responses")
+          .upsert(batch.map(clean), { onConflict: "id" });
+        if (error) {
+          // PGRST205: table not in the schema — migration not run yet.
+          if (error.code === "PGRST205") {
+            detTableMissing = true;
+            console.warn("[sync] det_responses table missing; responses kept on device");
+            break;
+          }
+          throw error;
+        }
+        await db.detResponses.bulkPut(batch.map((r) => ({ ...r, _dirty: 0 as Dirty })));
+      }
+    } catch (err) {
+      console.warn("[sync] det responses failed", err);
+      failed = true;
+    }
   }
 
   running = false;

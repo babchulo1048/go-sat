@@ -19,6 +19,22 @@ import { SettingsPage } from "@/features/settings/SettingsPage";
 import { NotFound } from "@/features/misc/NotFound";
 
 /*
+ * The Duolingo section is split out too: its content (80 prompts, 197 words,
+ * guides) shouldn't slow the first load of the SAT screens. It is still
+ * precached by the service worker, so it works offline all the same.
+ */
+const det = <K extends string>(name: K) =>
+  lazy(() => import("@/features/det/pages").then((m) => ({ default: m[name as keyof typeof m] })));
+const DetHome = det("DetHome");
+const DetTaskPage = det("DetTaskPage");
+const DetWritingRunner = det("DetWritingRunner");
+const VocabPage = det("VocabPage");
+const DrillsPage = det("DrillsPage");
+const MicTestPage = det("MicTestPage");
+
+const lazyFallback = <Skeleton className="h-96 w-full rounded-xl" />;
+
+/*
  * Progress is the only screen that needs a charting library. Splitting it out
  * keeps ~400 kB of Recharts off the critical path for the screens she actually
  * opens every day — which matters on a phone and on a slow connection.
@@ -37,6 +53,7 @@ export default function App() {
             nothing to tap away to mid-question.
           */}
           <Route path="/run/:attemptId" element={<TestRunner />} />
+          <Route path="/det/run/:promptId" element={<Suspense fallback={lazyFallback}><DetWritingRunner /></Suspense>} />
 
           <Route element={<AppShell />}>
             <Route index element={<HomePage />} />
@@ -54,6 +71,11 @@ export default function App() {
                 </Suspense>
               }
             />
+            <Route path="/det" element={<Suspense fallback={lazyFallback}><DetHome /></Suspense>} />
+            <Route path="/det/task/:taskId" element={<Suspense fallback={lazyFallback}><DetTaskPage /></Suspense>} />
+            <Route path="/det/vocab" element={<Suspense fallback={lazyFallback}><VocabPage /></Suspense>} />
+            <Route path="/det/drills" element={<Suspense fallback={lazyFallback}><DrillsPage /></Suspense>} />
+            <Route path="/det/mic" element={<Suspense fallback={lazyFallback}><MicTestPage /></Suspense>} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>

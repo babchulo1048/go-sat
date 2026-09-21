@@ -1,0 +1,56 @@
+[
+  {"pattern": "relative_clause", "plain": "My uncle lives in Nairobi. He taught me to play chess.", "model": "My uncle, who lives in Nairobi, taught me to play chess."},
+  {"pattern": "relative_clause", "plain": "I read a book last month. It changed how I think about money.", "model": "The book that I read last month changed how I think about money."},
+  {"pattern": "relative_clause", "plain": "We visited a village. My grandmother was born there.", "model": "We visited the village where my grandmother was born."},
+  {"pattern": "relative_clause", "plain": "The school canceled the trip. This disappointed everyone.", "model": "The school canceled the trip, which disappointed everyone."},
+
+  {"pattern": "participle_opener", "plain": "I finished my homework. Then I went for a walk.", "model": "Having finished my homework, I went for a walk."},
+  {"pattern": "participle_opener", "plain": "She felt nervous. She took a deep breath before speaking.", "model": "Feeling nervous, she took a deep breath before speaking."},
+  {"pattern": "participle_opener", "plain": "The bridge was built in 1920. It is still used every day.", "model": "Built in 1920, the bridge is still used every day."},
+  {"pattern": "participle_opener", "plain": "He did not know the answer. He decided to guess.", "model": "Not knowing the answer, he decided to guess."},
+
+  {"pattern": "concession_clause", "plain": "The exam was difficult. Most students passed.", "model": "Although the exam was difficult, most students passed."},
+  {"pattern": "concession_clause", "plain": "It rained heavily. The festival went ahead.", "model": "Despite the heavy rain, the festival went ahead."},
+  {"pattern": "concession_clause", "plain": "Online classes are convenient. They can feel lonely.", "model": "While online classes are convenient, they can feel lonely."},
+  {"pattern": "concession_clause", "plain": "I had very little experience. I got the job.", "model": "Even though I had very little experience, I got the job."},
+
+  {"pattern": "second_conditional", "plain": "I am not the principal. I want to shorten the school day.", "model": "If I were the principal, I would shorten the school day."},
+  {"pattern": "second_conditional", "plain": "We don't have a library in my neighborhood. Children don't read much.", "model": "If we had a library in my neighborhood, children would read more."},
+  {"pattern": "second_conditional", "plain": "I can't speak French, so I won't apply to that university.", "model": "If I could speak French, I would apply to that university."},
+  {"pattern": "second_conditional", "plain": "People drive everywhere. The air is polluted.", "model": "If people drove less, the air would be cleaner."},
+
+  {"pattern": "third_conditional", "plain": "I didn't study enough. I failed the quiz.", "model": "If I had studied more, I would have passed the quiz."},
+  {"pattern": "third_conditional", "plain": "My teacher encouraged me. That is why I entered the competition.", "model": "If my teacher had not encouraged me, I would never have entered the competition."},
+  {"pattern": "third_conditional", "plain": "We left late, so we missed the beginning of the film.", "model": "If we had left earlier, we would not have missed the beginning of the film."},
+  {"pattern": "third_conditional", "plain": "I wasn't pushed to volunteer. I only discovered teaching because I was.", "model": "Had I not been pushed to volunteer, I would never have discovered teaching."},
+
+  {"pattern": "negative_inversion", "plain": "I have never felt so nervous.", "model": "Never have I felt so nervous."},
+  {"pattern": "negative_inversion", "plain": "I understood the problem only after I failed twice.", "model": "Only after failing twice did I understand the problem."},
+  {"pattern": "negative_inversion", "plain": "Students rarely get a chance like this.", "model": "Rarely do students get a chance like this."},
+  {"pattern": "negative_inversion", "plain": "The program saves money, and it also builds confidence.", "model": "Not only does the program save money, but it also builds confidence."},
+
+  {"pattern": "cleft_sentence", "plain": "Consistency matters most.", "model": "What matters most is consistency."},
+  {"pattern": "cleft_sentence", "plain": "My grandmother taught me to read.", "model": "It was my grandmother who taught me to read."},
+  {"pattern": "cleft_sentence", "plain": "I enjoyed the people more than the place.", "model": "What I enjoyed most was the people, not the place."},
+  {"pattern": "cleft_sentence", "plain": "The lack of feedback frustrated me.", "model": "What frustrated me was the lack of feedback."},
+
+  {"pattern": "not_only_but_also", "plain": "Cycling is cheap. It is also healthy.", "model": "Cycling is not only cheap but also healthy."},
+  {"pattern": "not_only_but_also", "plain": "The teacher explained the topic. She also showed us how to apply it.", "model": "The teacher not only explained the topic but also showed us how to apply it."},
+  {"pattern": "not_only_but_also", "plain": "Volunteering helps the community. It helps the volunteer too.", "model": "Volunteering benefits not only the community but also the volunteer."},
+  {"pattern": "not_only_but_also", "plain": "Reading improves vocabulary and it improves concentration.", "model": "Reading improves not only vocabulary but also concentration."},
+
+  {"pattern": "passive_voice", "plain": "People hold the festival every spring.", "model": "The festival is held every spring."},
+  {"pattern": "passive_voice", "plain": "Someone built this church in the twelfth century.", "model": "This church was built in the twelfth century."},
+  {"pattern": "passive_voice", "plain": "They will announce the results next week.", "model": "The results will be announced next week."},
+  {"pattern": "passive_voice", "plain": "People have told me that I explain things clearly.", "model": "I have been told that I explain things clearly."},
+
+  {"pattern": "noun_clause_subject", "plain": "We may succeed or not. It depends on our effort.", "model": "Whether we succeed depends on our effort."},
+  {"pattern": "noun_clause_subject", "plain": "She said something. It surprised everyone.", "model": "What she said surprised everyone."},
+  {"pattern": "noun_clause_subject", "plain": "He got the scholarship. This is remarkable.", "model": "That he got the scholarship is remarkable."},
+  {"pattern": "noun_clause_subject", "plain": "You learn a language somehow. The method matters less than the practice.", "model": "How you learn a language matters less than how much you practice."},
+
+  {"pattern": "appositive", "plain": "My aunt is a retired nurse. She taught me first aid.", "model": "My aunt, a retired nurse, taught me first aid."},
+  {"pattern": "appositive", "plain": "Lalibela is a town in northern Ethiopia. It is famous for its rock-hewn churches.", "model": "Lalibela, a town in northern Ethiopia, is famous for its rock-hewn churches."},
+  {"pattern": "appositive", "plain": "My best friend is a talented runner. She trains every morning.", "model": "My best friend, a talented runner, trains every morning."},
+  {"pattern": "appositive", "plain": "Injera is a sour flatbread. It is eaten with almost every meal.", "model": "Injera, a sour flatbread, is eaten with almost every meal."}
+]

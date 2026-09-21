@@ -1,0 +1,249 @@
+[
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A street food vendor at night handing a steaming plate to a customer; string lights overhead, a small queue waiting behind.", "difficulty": "easy"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "Three students around a library table with laptops and open books; one is pointing at a screen while the others lean in.", "difficulty": "easy"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "An elderly man reading a newspaper on a park bench in autumn; fallen leaves on the path, pigeons near his feet.", "difficulty": "easy"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A crowded train platform at rush hour; commuters looking at their phones as a train pulls in.", "difficulty": "medium"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A child painting at an easel in a bright classroom, paint on her hands, a teacher watching from behind with a smile.", "difficulty": "easy"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A farmer walking behind two oxen plowing a field at sunrise, with hills and mist in the background.", "difficulty": "medium"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A chef carefully plating a dish in a busy restaurant kitchen; flames rising from a pan on the stove behind him.", "difficulty": "medium"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "Two hikers on a mountain summit studying a paper map, with a sea of clouds below them.", "difficulty": "medium"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "A flooded city street after heavy rain; a person with an umbrella wading past half-submerged parked cars.", "difficulty": "hard"},
+  {"task": "write_about_photo", "prompt": "Write one or more sentences that describe the image.", "photo_description": "An empty classroom with chairs stacked on desks, late afternoon light through the windows, a single forgotten backpack on the floor.", "difficulty": "hard"},
+
+  {"task": "interactive_writing", "prompt": "Some people think teenagers should have a part-time job while they are still in school. Do you agree or disagree? Give reasons and examples to support your view.", "follow_up": "You discussed the effects on students themselves. How might part-time work by students affect their families or their community?", "photo_description": null, "difficulty": "medium"},
+  {"task": "interactive_writing", "prompt": "Describe a skill you have taught yourself without a teacher. How did you learn it, and what did the experience teach you?", "follow_up": "What are the disadvantages of learning something without a teacher, and how can a learner overcome them?", "photo_description": null, "difficulty": "easy"},
+  {"task": "interactive_writing", "prompt": "Should schools replace printed textbooks with tablets and digital materials? Explain your position with reasons and examples.", "follow_up": "Think about students who do not have reliable electricity or internet at home. How should schools take them into account?", "photo_description": null, "difficulty": "medium"},
+  {"task": "interactive_writing", "prompt": "Some people prefer to live in a big city, while others prefer a small town. Which would you choose, and why?", "follow_up": "How do you think your preference might change as you grow older?", "photo_description": null, "difficulty": "easy"},
+  {"task": "interactive_writing", "prompt": "Is it better to have a few close friends or a wide circle of acquaintances? Support your answer with reasons and examples.", "follow_up": "How has social media changed the way people form and keep friendships?", "photo_description": null, "difficulty": "medium"},
+  {"task": "interactive_writing", "prompt": "Many countries are trying to reduce the use of plastic. What do you think is the most effective way to do this? Explain your reasoning.", "follow_up": "Who should carry more responsibility for reducing plastic: individuals, companies, or governments? Why?", "photo_description": null, "difficulty": "hard"},
+  {"task": "interactive_writing", "prompt": "Describe a tradition or celebration that is important in your culture. Why does it matter to you?", "follow_up": "Some traditions disappear as societies modernize. Should people make an effort to preserve them? Why or why not?", "photo_description": null, "difficulty": "easy"},
+  {"task": "interactive_writing", "prompt": "Do you think students learn more from working in groups or from working alone? Give reasons and examples.", "follow_up": "Describe what a teacher can do to make group work fair for everyone involved.", "photo_description": null, "difficulty": "medium"},
+  {"task": "interactive_writing", "prompt": "Some people believe that competition brings out the best in people; others believe cooperation does. What is your view?", "follow_up": "Give an example of a situation in which the opposite of your view might be true.", "photo_description": null, "difficulty": "hard"},
+  {"task": "interactive_writing", "prompt": "If you could change one thing about your school, what would it be, and how would it improve students' lives?", "follow_up": "What obstacles might make this change difficult, and how could they be overcome?", "photo_description": null, "difficulty": "medium"},
+
+  {"task": "writing_sample", "prompt": "Some people believe that university education should be free for everyone. Others think students should pay for it. Which view do you agree with? Give reasons and examples.", "photo_description": null, "difficulty": "hard"},
+  {"task": "writing_sample", "prompt": "Describe a person who has had a strong influence on your life. Explain how they influenced you and why it mattered.", "photo_description": null, "difficulty": "easy"},
+  {"task": "writing_sample", "prompt": "Do you agree or disagree with the following statement? It is more important to enjoy your job than to earn a high salary. Support your answer with reasons and examples.", "photo_description": null, "difficulty": "medium"},
+  {"task": "writing_sample", "prompt": "Many students now use artificial intelligence tools to help with schoolwork. Is this a positive or a negative development? Explain your view.", "photo_description": null, "difficulty": "hard"},
+  {"task": "writing_sample", "prompt": "Describe a challenge you faced and how you dealt with it. What did you learn about yourself?", "photo_description": null, "difficulty": "easy"},
+  {"task": "writing_sample", "prompt": "Some people think that children should begin learning a foreign language in primary school. Others think it is better to wait until secondary school. What is your opinion?", "photo_description": null, "difficulty": "medium"},
+  {"task": "writing_sample", "prompt": "Why do you want to study abroad, and how do you expect the experience to change you? Give specific reasons.", "photo_description": null, "difficulty": "medium"},
+  {"task": "writing_sample", "prompt": "Do you agree or disagree? Success in life depends more on hard work than on talent. Use reasons and examples to support your position.", "photo_description": null, "difficulty": "medium"},
+  {"task": "writing_sample", "prompt": "Some cities are banning cars from their centers. Is this a good idea? Explain the advantages and disadvantages, and give your own view.", "photo_description": null, "difficulty": "hard"},
+  {"task": "writing_sample", "prompt": "Describe a book, film, or piece of music that changed the way you think about something. Explain what changed and why.", "photo_description": null, "difficulty": "easy"},
+
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "easy", "conversation": [
+    {"speaker": "Student", "text": "Hi Professor Alvarez, do you have a minute? I wanted to ask about the group presentation."},
+    {"speaker": "Professor", "text": "Of course. What's on your mind?"},
+    {"speaker": "Student", "text": "One of our group members hasn't replied to any messages for a week, and the presentation is next Tuesday."},
+    {"speaker": "Professor", "text": "I see. Have you already divided the work among the rest of you?"},
+    {"speaker": "Student", "text": "Yes, but his section is the data analysis, and none of us has the survey results he collected."},
+    {"speaker": "Professor", "text": "In that case, I'll email him today. If he doesn't respond by Friday, I'll send you the backup data set from last year so you can finish."},
+    {"speaker": "Student", "text": "That would be a huge relief. Should we mention the problem in the presentation?"},
+    {"speaker": "Professor", "text": "No need. Just note who did which part on the final slide, and I'll grade accordingly."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "easy", "conversation": [
+    {"speaker": "Student", "text": "Excuse me, I'm looking for a book on renewable energy policy, but the catalog says it's checked out."},
+    {"speaker": "Librarian", "text": "Let me look. Yes, it's due back in two weeks. Do you need it sooner?"},
+    {"speaker": "Student", "text": "My essay is due in ten days, so that's too late."},
+    {"speaker": "Librarian", "text": "We can request a copy from another campus library. It usually arrives in three days."},
+    {"speaker": "Student", "text": "That would work. Is there a fee?"},
+    {"speaker": "Librarian", "text": "No, it's free for students. I can also show you the e-book version of an earlier edition, which you can read right now."},
+    {"speaker": "Student", "text": "Great, I'll take both. How do I get notified when the printed copy arrives?"},
+    {"speaker": "Librarian", "text": "You'll get an email. You then have five days to pick it up at this desk."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "medium", "conversation": [
+    {"speaker": "Student A", "text": "Have you decided which elective to take next semester? I'm stuck between statistics and creative writing."},
+    {"speaker": "Student B", "text": "What do you want to major in?"},
+    {"speaker": "Student A", "text": "Psychology, most likely."},
+    {"speaker": "Student B", "text": "Then statistics will save you later. My sister studied psychology and said the research methods courses were impossible without it."},
+    {"speaker": "Student A", "text": "But I've heard the statistics professor is really strict, and I'm worried about my grade average."},
+    {"speaker": "Student B", "text": "She is strict, but she offers weekly review sessions, and people who attend usually do well. I went to every one."},
+    {"speaker": "Student A", "text": "That changes things. Maybe I can take creative writing in the summer instead."},
+    {"speaker": "Student B", "text": "That's what I'd do. Registration opens Monday, so sign up early; statistics fills fast."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "medium", "conversation": [
+    {"speaker": "Student", "text": "Dr. Okafor, I got my lab report back, and I don't understand why I lost so many points on the discussion section."},
+    {"speaker": "Professor", "text": "Let's look at it together. Your results are accurate, but the discussion only repeats them. It doesn't explain what they mean."},
+    {"speaker": "Student", "text": "I thought describing the results carefully was the point."},
+    {"speaker": "Professor", "text": "That belongs in the results section. The discussion should compare your findings with what the theory predicted, and explain any differences."},
+    {"speaker": "Student", "text": "So I should have mentioned that our reaction was slower than expected?"},
+    {"speaker": "Professor", "text": "Exactly, and suggested why. Perhaps the temperature wasn't constant. That kind of reasoning is what earns the points."},
+    {"speaker": "Student", "text": "Can I rewrite it for a better grade?"},
+    {"speaker": "Professor", "text": "You can resubmit the discussion section by next Friday, and I'll average the two grades."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "medium", "conversation": [
+    {"speaker": "Student", "text": "Hi, I'm having a problem with my housing. The heating in my room hasn't worked for three days."},
+    {"speaker": "Housing officer", "text": "I'm sorry to hear that. Did you report it through the online form?"},
+    {"speaker": "Student", "text": "I did, on Monday, but nobody has come."},
+    {"speaker": "Housing officer", "text": "I can see the request here. It was marked low priority by mistake. I'll change it to urgent right now."},
+    {"speaker": "Student", "text": "Thank you. When can I expect someone?"},
+    {"speaker": "Housing officer", "text": "A technician will come tomorrow morning between eight and ten. In the meantime, you can borrow a portable heater from this office."},
+    {"speaker": "Student", "text": "I have class at nine. Do I need to be there?"},
+    {"speaker": "Housing officer", "text": "No, the technician has a key. Just leave a note on your desk describing the problem."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "hard", "conversation": [
+    {"speaker": "Student", "text": "Professor Lindqvist, I'd like to write my term paper on how social media affects elections, but I'm not sure the topic is suitable."},
+    {"speaker": "Professor", "text": "It's suitable, but far too broad. You could write five books on it. What part interests you most?"},
+    {"speaker": "Student", "text": "I'm curious whether political advertising online actually changes anyone's vote."},
+    {"speaker": "Professor", "text": "Better. Now narrow it to one country and one election, so you can work with real data."},
+    {"speaker": "Student", "text": "Would the most recent national election here work? There was a lot of reporting on online ads."},
+    {"speaker": "Professor", "text": "It would. Be careful, though: news reports are not evidence of an effect. Look for academic studies that measured voting behavior."},
+    {"speaker": "Student", "text": "Where should I start looking?"},
+    {"speaker": "Professor", "text": "Start with the two articles on the course reading list under week nine, and follow their references. Send me a one-page outline by the end of the month."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "easy", "conversation": [
+    {"speaker": "Student A", "text": "Are you coming to the study group tonight? We're reviewing for the biology midterm."},
+    {"speaker": "Student B", "text": "I want to, but I have a shift at the campus cafe until eight."},
+    {"speaker": "Student A", "text": "We're meeting from six to nine, so you'd only catch the last hour."},
+    {"speaker": "Student B", "text": "What are you covering in the last hour?"},
+    {"speaker": "Student A", "text": "Cell division, which is the part everyone finds hardest."},
+    {"speaker": "Student B", "text": "That's exactly what I need. I'll come straight after work."},
+    {"speaker": "Student A", "text": "Good. I'll share my notes from the first two hours, so you won't miss anything."},
+    {"speaker": "Student B", "text": "Thanks. I'll bring coffee for everyone from the cafe."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "hard", "conversation": [
+    {"speaker": "Student", "text": "I'd like to apply for the summer research program, but I missed the information session. Is it too late?"},
+    {"speaker": "Advisor", "text": "Not at all. Applications close in three weeks. Do you know which lab you'd like to join?"},
+    {"speaker": "Student", "text": "The marine biology lab, but I've only taken one biology course."},
+    {"speaker": "Advisor", "text": "That isn't necessarily a problem. The professors care more about motivation than about your transcript. Your statement of interest matters most."},
+    {"speaker": "Student", "text": "What should the statement include?"},
+    {"speaker": "Advisor", "text": "Explain why that lab in particular, what you hope to learn, and any relevant experience, even outside the classroom."},
+    {"speaker": "Student", "text": "I volunteered on a coastal cleanup project last year. Would that count?"},
+    {"speaker": "Advisor", "text": "Absolutely. Mention it. You'll also need one recommendation letter, so ask a professor this week, because they need time to write it."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "medium", "conversation": [
+    {"speaker": "Student", "text": "Professor Haile, I'm afraid I'll have to miss Thursday's class. I have a medical appointment I can't move."},
+    {"speaker": "Professor", "text": "Thank you for telling me in advance. Thursday is the quiz on chapter six, though."},
+    {"speaker": "Student", "text": "I know, and that's what worries me. Is there any way to make it up?"},
+    {"speaker": "Professor", "text": "You can take it during my office hours on Friday afternoon, as long as you bring a note from the clinic."},
+    {"speaker": "Student", "text": "That's no problem. Will the quiz be the same?"},
+    {"speaker": "Professor", "text": "A different version, same difficulty. You should also get the lecture notes from a classmate, because Thursday's material will be on the final exam."},
+    {"speaker": "Student", "text": "I'll ask my lab partner. Thank you for being flexible."},
+    {"speaker": "Professor", "text": "You're welcome. See you Friday at two."}
+  ]},
+  {"task": "summarize_conversation", "prompt": "Summarize the conversation you just had in 75 seconds.", "photo_description": null, "difficulty": "hard", "conversation": [
+    {"speaker": "Student A", "text": "I've been thinking about running for student council president, but I'm not sure I have enough time."},
+    {"speaker": "Student B", "text": "What's holding you back, exactly?"},
+    {"speaker": "Student A", "text": "I'm already on the debate team, and council meetings are twice a week."},
+    {"speaker": "Student B", "text": "Could you run for a smaller role instead? The treasurer only attends one meeting a week."},
+    {"speaker": "Student A", "text": "Maybe, but the reason I want to run is to change the cafeteria contract, and only the president can negotiate that."},
+    {"speaker": "Student B", "text": "Then the real question is whether you'd give up debate for a year."},
+    {"speaker": "Student A", "text": "I don't think I would. Debate is what I want to put on my university applications."},
+    {"speaker": "Student B", "text": "So don't run. Support a candidate who shares your view on the cafeteria, and help with their campaign instead."}
+  ]},
+
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A barber cutting a customer's hair in a small neighborhood shop; mirrors along the wall, old posters, another customer waiting and reading.", "difficulty": "easy"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "Children playing soccer on a dusty field at sunset, with a makeshift goal made of sticks and houses in the distance.", "difficulty": "easy"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A scientist in a white coat looking into a microscope in a laboratory, with two colleagues talking in the background.", "difficulty": "medium"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A busy airport departure hall: travelers with luggage, a large departures board, a family hugging goodbye near the gate.", "difficulty": "medium"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A street musician playing guitar on a corner, a small crowd gathered around, an open guitar case with coins in it.", "difficulty": "easy"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A woman working on a laptop at a cafe window table while rain runs down the glass; a cup of coffee beside her.", "difficulty": "medium"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "Volunteers of different ages planting young trees on a bare hillside, with shovels and buckets of water.", "difficulty": "medium"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A graduation ceremony outdoors: students in gowns throwing their caps into the air, families taking photos.", "difficulty": "easy"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A traffic jam in a large city: minibuses, motorbikes, and street vendors walking between the vehicles selling goods.", "difficulty": "hard"},
+  {"task": "speak_about_photo", "prompt": "Speak about the image for up to 90 seconds.", "photo_description": "A grandfather running beside a small child on a bicycle in a quiet street, one hand on the seat, both laughing.", "difficulty": "medium"},
+
+  {"task": "read_then_speak", "prompt": "Talk about a place you enjoy visiting.", "bullets": ["Where is it?", "How often do you go there?", "What do you do there?", "Why is it special to you?"], "photo_description": null, "difficulty": "easy"},
+  {"task": "read_then_speak", "prompt": "Describe a teacher who had a positive effect on you.", "bullets": ["Who was the teacher?", "What subject did they teach?", "What did they do differently from other teachers?", "How did they change you?"], "photo_description": null, "difficulty": "easy"},
+  {"task": "read_then_speak", "prompt": "Talk about a goal you are working toward.", "bullets": ["What is the goal?", "Why is it important to you?", "What have you done so far to reach it?", "What will you do once you achieve it?"], "photo_description": null, "difficulty": "medium"},
+  {"task": "read_then_speak", "prompt": "Describe a time when you helped someone.", "bullets": ["Who did you help?", "What was the situation?", "What exactly did you do?", "How did you both feel afterwards?"], "photo_description": null, "difficulty": "easy"},
+  {"task": "read_then_speak", "prompt": "Talk about a piece of technology you use every day.", "bullets": ["What is it?", "What do you use it for?", "How would your day change without it?", "Does it have any negative effects on you?"], "photo_description": null, "difficulty": "medium"},
+  {"task": "read_then_speak", "prompt": "Describe a decision that was difficult for you to make.", "bullets": ["What was the decision?", "Why was it difficult?", "Who or what helped you decide?", "Do you still think you made the right choice?"], "photo_description": null, "difficulty": "hard"},
+  {"task": "read_then_speak", "prompt": "Talk about a festival or holiday you enjoy.", "bullets": ["What is it, and when does it take place?", "How do people prepare for it?", "What do you personally do on that day?", "Why do you think it remains popular?"], "photo_description": null, "difficulty": "easy"},
+  {"task": "read_then_speak", "prompt": "Describe a time you disagreed with a friend or family member.", "bullets": ["What was the disagreement about?", "How did each of you see the issue?", "How was it resolved?", "What did you learn from it?"], "photo_description": null, "difficulty": "hard"},
+  {"task": "read_then_speak", "prompt": "Talk about a subject you would like to study at university.", "bullets": ["What is the subject?", "When did you become interested in it?", "What do you hope to do with it in the future?", "What might be challenging about studying it?"], "photo_description": null, "difficulty": "medium"},
+  {"task": "read_then_speak", "prompt": "Describe a habit you would like to change.", "bullets": ["What is the habit?", "How did it start?", "Why do you want to change it?", "What is your plan for changing it?"], "photo_description": null, "difficulty": "medium"},
+
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "easy", "turns": [
+    "What do you usually do on weekends?",
+    "Do you prefer spending free time alone or with other people? Why?",
+    "How has the way you spend your free time changed since you were a child?",
+    "Let's talk about food. What is a typical meal in your home?",
+    "Do you think people today eat more or less healthily than their grandparents did?",
+    "Should schools teach students how to cook? Why or why not?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "easy", "turns": [
+    "Tell me about the neighborhood you live in.",
+    "What do you like most about it?",
+    "If you could change one thing about your neighborhood, what would it be?",
+    "Now let's talk about travel. Where would you most like to travel, and why?",
+    "Do you prefer planning a trip carefully or deciding things as you go?",
+    "What can people learn from traveling that they cannot learn at home?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "medium", "turns": [
+    "What subject do you enjoy most at school?",
+    "What makes a lesson interesting for you?",
+    "Do you think grades are a fair way to measure what a student has learned?",
+    "Let's change the topic. How do you usually get news about the world?",
+    "How do you decide whether a piece of news is trustworthy?",
+    "Should social media companies be responsible for false information on their platforms?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "medium", "turns": [
+    "Do you play any sports or do any regular exercise?",
+    "Why do you think some people find it hard to exercise regularly?",
+    "Should physical education be compulsory for all students until graduation?",
+    "Let's talk about music. What kind of music do you listen to?",
+    "Does the music people listen to say something about their personality?",
+    "Why do you think music is present in every culture in the world?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "medium", "turns": [
+    "Describe a typical school day for you.",
+    "What is the most stressful part of your day?",
+    "What do you do to relax when you feel stressed?",
+    "Now let's talk about the future. What job would you like to have one day?",
+    "What skills will be most important for that job?",
+    "Do you think people will change careers more often in the future than they do now?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "hard", "turns": [
+    "How much time do you spend on your phone each day?",
+    "Do you think that is too much, too little, or about right?",
+    "Some schools ban phones completely. Is that a good policy?",
+    "Let's move to a different topic. Is it important for young people to follow politics?",
+    "At what age should people be allowed to vote, in your opinion?",
+    "How can schools prepare students to be responsible citizens?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "medium", "turns": [
+    "Tell me about a friend you have known for a long time.",
+    "What qualities make someone a good friend?",
+    "Is it possible to be close friends with someone you have only met online?",
+    "Let's talk about reading. Do you enjoy reading books?",
+    "Do you prefer printed books or reading on a screen? Why?",
+    "Do you think people will still read novels fifty years from now?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "hard", "turns": [
+    "What languages do you speak?",
+    "What was the hardest part of learning English for you?",
+    "Does speaking another language change the way a person thinks?",
+    "Let's talk about the environment. What environmental problem worries you most?",
+    "What can one ordinary person realistically do about it?",
+    "Should economic growth ever take priority over protecting the environment?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "easy", "turns": [
+    "Who do you live with?",
+    "What responsibilities do you have at home?",
+    "Should children be paid for doing household chores?",
+    "Let's talk about shopping. Do you prefer shopping online or in stores?",
+    "What was the last thing you bought that you were really happy with?",
+    "Do advertisements influence what you buy? How?"
+  ]},
+  {"task": "interactive_speaking", "prompt": "Answer each question aloud. You will hear each question only once.", "photo_description": null, "difficulty": "hard", "turns": [
+    "Why do you want to study at a university abroad?",
+    "What do you expect to be the biggest challenge of living in another country?",
+    "How will you deal with missing your family and friends?",
+    "Let's talk about success. How do you define a successful life?",
+    "Is failure necessary in order to succeed?",
+    "Do you think society puts too much pressure on young people to succeed?"
+  ]},
+
+  {"task": "speaking_sample", "prompt": "Describe a person you admire. Explain who they are, what they have done, and why you admire them.", "photo_description": null, "difficulty": "easy"},
+  {"task": "speaking_sample", "prompt": "Some people think that students should take a year off between high school and university. Do you agree or disagree? Explain your reasons.", "photo_description": null, "difficulty": "medium"},
+  {"task": "speaking_sample", "prompt": "Talk about an experience that taught you something important about yourself. What happened, and what did you learn?", "photo_description": null, "difficulty": "easy"},
+  {"task": "speaking_sample", "prompt": "Do you think it is better to study a subject you love, or a subject that leads to a well-paid job? Explain your view with examples.", "photo_description": null, "difficulty": "medium"},
+  {"task": "speaking_sample", "prompt": "Describe your hometown to someone who has never been there. What would surprise a visitor most?", "photo_description": null, "difficulty": "easy"},
+  {"task": "speaking_sample", "prompt": "Many people say that young people today have an easier life than their parents did. Do you agree? Give reasons for your answer.", "photo_description": null, "difficulty": "hard"},
+  {"task": "speaking_sample", "prompt": "If you could solve one problem in your country, what would it be, and how would you approach it?", "photo_description": null, "difficulty": "hard"},
+  {"task": "speaking_sample", "prompt": "Talk about a skill that you believe everyone should learn. Why is it so valuable?", "photo_description": null, "difficulty": "medium"},
+  {"task": "speaking_sample", "prompt": "Some people believe that failure is the best teacher. To what extent do you agree? Use an example from your own life if you can.", "photo_description": null, "difficulty": "hard"},
+  {"task": "speaking_sample", "prompt": "What do you hope to contribute to the university community you join? Describe specific things you would like to do.", "photo_description": null, "difficulty": "medium"}
+]
