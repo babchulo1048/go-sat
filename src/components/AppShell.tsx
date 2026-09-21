@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BarChart3, BookOpen, Home, Settings, Target } from "lucide-react";
+import { BarChart3, BookOpen, Home, Languages, Settings, Target } from "lucide-react";
 import { SyncIndicator } from "@/components/SyncIndicator";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +8,7 @@ const TABS = [
   { to: "/practice", label: "Practice", icon: Target, end: false },
   { to: "/review", label: "Review", icon: BookOpen, end: false },
   { to: "/progress", label: "Progress", icon: BarChart3, end: false },
+  { to: "/det", label: "English", icon: Languages, end: false },
 ] as const;
 
 const TITLES: Record<string, string> = {
@@ -16,6 +17,10 @@ const TITLES: Record<string, string> = {
   "/progress": "Progress",
   "/notes": "Notes",
   "/settings": "Settings",
+  "/det": "Duolingo English Test",
+  "/det/vocab": "Vocabulary",
+  "/det/drills": "Sentence variety",
+  "/det/mic": "Microphone test",
 };
 
 export function AppShell() {

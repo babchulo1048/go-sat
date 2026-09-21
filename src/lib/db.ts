@@ -10,6 +10,12 @@ import type {
   Test,
   TestPart,
 } from "@/types/db";
+import type {
+  DetMetrics,
+  DetMode,
+  DetTaskId,
+  SelfScores,
+} from "@/features/det/types";
 
 /**
  * IndexedDB mirror of the Supabase schema.
@@ -82,6 +88,44 @@ export interface Reattempt {
   at: number;
 }
 
+/* ---------------------------------------------------- Duolingo (DET) */
+
+/** One practice response. Text syncs; audio (later) stays on the device. */
+export interface LocalDetResponse {
+  id: string;
+  device_id: string;
+  task_id: DetTaskId;
+  prompt_id: string;
+  mode: DetMode;
+  response_text: string | null;
+  part2_text: string | null;
+  audio_mime: string | null;
+  duration_seconds: number | null;
+  metrics: DetMetrics | null;
+  self_scores: SelfScores | null;
+  reflection: string | null;
+  created_at: string;
+  _dirty: Dirty;
+}
+
+/** Local-only: which vocabulary she has learned, and her own sentence. */
+export interface VocabProgress {
+  term: string;
+  status: "new" | "learning" | "known";
+  sentence: string;
+  updated_at: number;
+}
+
+/** Local-only: sentence-variety drill attempts. */
+export interface DrillAttempt {
+  id?: number;
+  pattern: string;
+  plain: string;
+  answer: string;
+  correct: boolean;
+  at: number;
+}
+
 class SatDatabase extends Dexie {
   domains!: Table<Domain, string>;
   skills!: Table<Skill, string>;
@@ -97,6 +141,10 @@ class SatDatabase extends Dexie {
   runner!: Table<RunnerState, string>;
   meta!: Table<MetaRow, string>;
   reattempts!: Table<Reattempt, number>;
+
+  detResponses!: Table<LocalDetResponse, string>;
+  vocabProgress!: Table<VocabProgress, string>;
+  drillAttempts!: Table<DrillAttempt, number>;
 
   constructor() {
     super("sat-practice");
@@ -115,6 +163,14 @@ class SatDatabase extends Dexie {
       runner: "attempt_id",
       meta: "key",
       reattempts: "++id, question_id, at",
+    });
+
+    // v2 — Duolingo English Test practice. Additive only: every v1 store is
+    // untouched, so existing SAT data upgrades in place.
+    this.version(2).stores({
+      detResponses: "id, task_id, prompt_id, created_at, _dirty",
+      vocabProgress: "term, status",
+      drillAttempts: "++id, pattern, at",
     });
   }
 }

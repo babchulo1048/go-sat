@@ -1,4 +1,5 @@
 import { db, type Dirty, type LocalAnswer } from "@/lib/db";
+import { scoreAttempt } from "@/lib/scoring";
 
 /**
  * One-time local repair for duplicate answer rows.
@@ -75,7 +76,6 @@ export async function dedupeAnswers(): Promise<number> {
  * everything agrees.
  */
 export async function recomputeCompletedScores(): Promise<number> {
-  const { scoreAttempt } = await import("@/lib/scoring");
   const completed = await db.attempts.where("status").equals("completed").toArray();
 
   let changed = 0;
