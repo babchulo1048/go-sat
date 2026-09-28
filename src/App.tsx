@@ -10,6 +10,7 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { HomePage } from "@/features/home/HomePage";
 import { PracticePage } from "@/features/practice/PracticePage";
 import { PreTestBrief } from "@/features/practice/PreTestBrief";
+import { WeekReferencePage } from "@/features/daily/WeekReferencePage";
 import { TestRunner } from "@/features/runner/TestRunner";
 import { ResultsPage } from "@/features/results/ResultsPage";
 import { QuestionReview } from "@/features/review/QuestionReview";
@@ -59,6 +60,7 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="/practice" element={<PracticePage />} />
             <Route path="/practice/:testId" element={<PreTestBrief />} />
+            <Route path="/week/reference" element={<WeekReferencePage />} />
             <Route path="/results/:attemptId" element={<ResultsPage />} />
             <Route path="/review" element={<MistakeLog />} />
             <Route path="/review/:attemptId" element={<QuestionReview />} />

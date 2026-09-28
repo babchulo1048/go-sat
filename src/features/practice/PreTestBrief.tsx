@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AlertTriangle, ArrowLeft, Clock, Info } from "lucide-react";
+import { AlertTriangle, ArrowLeft, BookOpen, Clock, Info } from "lucide-react";
 import { db } from "@/lib/db";
 import { createAttempt, getParts, getTest } from "@/lib/repo";
 import { formatClock, formatDuration } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SECTION_LABEL } from "@/types/db";
+import { CARDS } from "@/features/daily/cards";
+import { CardBlocks, Inline } from "@/features/daily/CardBlocks";
 
 export function PreTestBrief() {
   const { testId = "" } = useParams();
@@ -41,6 +43,7 @@ export function PreTestBrief() {
   const totalQuestions = parts.reduce((n, p) => n + (counts.get(p.id) ?? 0), 0);
   const totalSeconds = parts.reduce((n, p) => n + p.duration_seconds, 0);
   const isFullMock = test.test_type === "full_mock";
+  const card = CARDS[test.slug];
 
   const start = async (mode: "timed" | "untimed") => {
     setStarting(true);
@@ -64,6 +67,26 @@ export function PreTestBrief() {
           <p className="text-sm text-muted-foreground">{test.description}</p>
         )}
       </header>
+
+      {card && (
+        <section className="space-y-3 rounded-xl border border-brand/30 bg-surface p-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="flex items-center gap-2 text-sm font-semibold">
+              <BookOpen className="size-4 text-brand" aria-hidden />
+              Read this first
+            </h3>
+            <span className="text-xs text-muted-foreground tnum">{card.minutes} min</span>
+          </div>
+          <CardBlocks blocks={card.blocks} />
+          <div className="rounded-lg bg-warning-soft p-3 text-sm">
+            <span className="font-semibold">Watch for: </span>
+            <Inline text={card.watch} />
+          </div>
+          <Link to="/week/reference" className="inline-block text-sm font-medium text-brand">
+            Open the full rules sheets →
+          </Link>
+        </section>
+      )}
 
       <section className="rounded-xl border border-border bg-surface">
         <div className="flex items-center justify-between border-b border-border px-4 py-3">

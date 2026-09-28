@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Link } from "react-router-dom";
-import { ChevronRight, Clock, ListChecks } from "lucide-react";
+import { BookOpen, CheckCircle2, ChevronRight, Clock, ListChecks } from "lucide-react";
 import { db } from "@/lib/db";
 import { getTests } from "@/lib/repo";
 import { formatDuration, formatPercent } from "@/lib/format";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { EmptyState, SectionHeading } from "@/components/common";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Domain, Section, Test } from "@/types/db";
+import { isDailySet } from "@/features/daily/cards";
 
 type SectionFilter = "all" | Section;
 
@@ -111,8 +112,12 @@ export function PracticePage() {
     );
   }
 
+  const daily = filtered.filter((c) => isDailySet(c.test.slug));
   const mocks = filtered.filter((c) => c.test.test_type === "full_mock");
-  const focused = filtered.filter((c) => c.test.test_type !== "full_mock");
+  const focused = filtered.filter(
+    (c) => c.test.test_type !== "full_mock" && !isDailySet(c.test.slug),
+  );
+  const dailyDone = daily.filter((c) => c.attemptCount > 0).length;
   const rwFocused = focused.filter((c) => c.test.section_scope === "rw");
   const mathFocused = focused.filter((c) => c.test.section_scope === "math");
   const otherFocused = focused.filter(
@@ -134,6 +139,32 @@ export function PracticePage() {
           title="Nothing matches those filters"
           body="Try widening the section or domain filter."
         />
+      )}
+
+      {daily.length > 0 && (
+        <section>
+          <SectionHeading>This week — one a day</SectionHeading>
+          <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3.5">
+            <p className="text-sm">
+              <span className="font-medium tnum">
+                {dailyDone} of {daily.length} done.
+              </span>{" "}
+              <span className="text-muted-foreground">Read the card, answer untimed, read every explanation.</span>
+            </p>
+            <Link
+              to="/week/reference"
+              className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand"
+            >
+              <BookOpen className="size-4" aria-hidden />
+              Rules
+            </Link>
+          </div>
+          <div className="space-y-2.5">
+            {daily.map((c) => (
+              <TestCard key={c.test.id} data={c} />
+            ))}
+          </div>
+        </section>
       )}
 
       {mocks.length > 0 && (
@@ -209,7 +240,12 @@ function TestCard({ data }: { data: TestCardData }) {
       className="flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-border-strong"
     >
       <div className="min-w-0 flex-1">
-        <p className="font-semibold leading-snug">{test.title}</p>
+        <p className="flex items-center gap-1.5 font-semibold leading-snug">
+          {test.title}
+          {isDailySet(test.slug) && attemptCount > 0 && (
+            <CheckCircle2 className="size-4 shrink-0 text-success" aria-label="Done" />
+          )}
+        </p>
         {test.subtitle && (
           <p className="mt-0.5 truncate text-sm text-muted-foreground">{test.subtitle}</p>
         )}
