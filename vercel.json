@@ -3,9 +3,12 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "crons": [
+    { "path": "/api/progress-email", "schedule": "0 15 * * 1,3,5" }
+  ],
   "rewrites": [
     {
-      "source": "/((?!assets/|sw\\.js|workbox-.*\\.js|manifest\\.webmanifest|favicon\\.ico|robots\\.txt|.*\\.png).*)",
+      "source": "/((?!api/|assets/|sw\\.js|workbox-.*\\.js|manifest\\.webmanifest|favicon\\.ico|robots\\.txt|.*\\.png).*)",
       "destination": "/index.html"
     }
   ],
