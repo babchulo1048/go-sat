@@ -9,6 +9,8 @@ import { MOCK_RW_1, MOCK_RW_2 } from "./mock-rw.mjs";
 import { MOCK_MATH_1, MOCK_MATH_2 } from "./mock-math.mjs";
 import { MOCK2_RW_1, MOCK2_RW_2 } from "./mock2-rw.mjs";
 import { MOCK2_MATH_1, MOCK2_MATH_2 } from "./mock2-math.mjs";
+import { MOCK3_RW_1, MOCK3_RW_2 } from "./mock3-rw.mjs";
+import { MOCK3_MATH_1, MOCK3_MATH_2 } from "./mock3-math.mjs";
 import { DRILLS } from "./drills.mjs";
 import { WEEK1_DAYS } from "./week1-daily.mjs";
 
@@ -62,11 +64,11 @@ function orderQuestions(list, section) {
  */
 const LETTERS = ["A", "B", "C", "D"];
 
-function balanceChoices(x, idx) {
+function balanceChoices(x, slot) {
   if (x.type !== "mc") return x;
   const from = LETTERS.indexOf(x.ans);
   if (from < 0) return x;
-  const to = idx % 4;
+  const to = slot % 4;
 
   // Correct answer takes the target slot; the rest fill the gaps in order.
   const others = x.choices.filter((_, i) => i !== from);
@@ -97,9 +99,36 @@ function balanceChoices(x, idx) {
   return { ...x, choices: rearranged, ans: LETTERS[to], exp };
 }
 
+/**
+ * Target slots for "shuffled" balancing. A plain round-robin makes the key run
+ * A, B, C, D, A, B… down the module, which a student can spot and exploit.
+ * Here every run of four still uses each letter exactly once (so the key stays
+ * balanced), but the order inside each run is a deterministic permutation
+ * derived from the part id — stable across rebuilds, unpredictable to her.
+ */
+function shuffledSlots(n, seed) {
+  const slots = [];
+  for (let b = 0; b * 4 < n; b++) {
+    const h = createHash("sha1").update(`${seed}:${b}`).digest();
+    const perm = [0, 1, 2, 3];
+    for (let i = 3; i > 0; i--) {
+      const j = h[i] % (i + 1);
+      [perm[i], perm[j]] = [perm[j], perm[i]];
+    }
+    slots.push(...perm);
+  }
+  return slots;
+}
+
 function questionSql(testSlug, partId, partSection, list, balance) {
   let ordered = orderQuestions(list, partSection);
-  if (balance) ordered = ordered.map(balanceChoices);
+  // true = round-robin (Mock 2, already seeded — must not change); "shuffled" = new tests.
+  if (balance === "shuffled") {
+    const slots = shuffledSlots(ordered.length, partId);
+    ordered = ordered.map((x, i) => balanceChoices(x, slots[i]));
+  } else if (balance) {
+    ordered = ordered.map((x, i) => balanceChoices(x, i));
+  }
   return ordered
     .map((x, idx) => {
       const id = uuid(`${testSlug}:${partId}:${idx + 1}`);
@@ -197,6 +226,32 @@ const mock2 = {
 };
 writeFileSync(join(OUT, "11_full_mock_2.sql"), testSql(mock2));
 
+// ---- 12 full mock 3 --------------------------------------------------------
+// Measures the week of daily practice (Oct 2026), so it follows the official
+// distribution rather than her weak areas. Fixes Mock 2's two calibration
+// errors: Conventions at the official (harder) level, and Cross-Text exactly
+// once in the whole test. Module 1 is a broad mix; Module 2 the upper module.
+const mock3 = {
+  slug: "full-mock-3",
+  title: "Full Mock 3",
+  subtitle: "End-of-week check — official question mix",
+  test_type: "full_mock",
+  section_scope: "both",
+  focus: null,
+  difficulty: "hard",
+  description:
+    "Four timed parts: two Reading and Writing modules of 27 questions and two Math modules of 22 questions. Same difficulty as Mock 2, with Conventions at the level of the official test. Take it in one sitting.",
+  sort: 3,
+  balanceAnswers: "shuffled",
+  parts: [
+    { title: "Reading and Writing — Module 1", section: "rw", duration: 32 * 60, questions: MOCK3_RW_1 },
+    { title: "Reading and Writing — Module 2", section: "rw", duration: 32 * 60, questions: MOCK3_RW_2 },
+    { title: "Math — Module 1", section: "math", duration: 35 * 60, questions: MOCK3_MATH_1 },
+    { title: "Math — Module 2", section: "math", duration: 35 * 60, questions: MOCK3_MATH_2 },
+  ],
+};
+writeFileSync(join(OUT, "12_full_mock_3.sql"), testSql(mock3));
+
 // ---- 20..33 drills ---------------------------------------------------------
 for (const d of DRILLS) {
   writeFileSync(
@@ -255,7 +310,7 @@ writeFileSync(join(OUT, "40_week1_daily.sql"), sql);
 // ---- sanity checks ---------------------------------------------------------
 const problems = [];
 let mockCount = 0;
-for (const m of [mock, mock2]) {
+for (const m of [mock, mock2, mock3]) {
   const n = m.parts.reduce((acc, p) => acc + p.questions.length, 0);
   mockCount += n;
   if (n !== 98) problems.push(`${m.title} has ${n} questions, expected 98`);
@@ -286,6 +341,7 @@ const skillIds = new Set(SKILLS.map((s) => s[0]));
 const all = [
   ...mock.parts.flatMap((p) => p.questions),
   ...mock2.parts.flatMap((p) => p.questions),
+  ...mock3.parts.flatMap((p) => p.questions),
   ...DRILLS.flatMap((d) => d.questions),
   ...WEEK1_DAYS.flatMap((d) => d.questions),
 ];
@@ -305,4 +361,4 @@ if (problems.length) {
   console.error("SEED PROBLEMS:\n" + problems.join("\n"));
   process.exit(1);
 }
-console.log(`OK — 2 mocks (${mockCount} questions), ${DRILLS.length} drills, ${WEEK1_DAYS.length} daily sets, ${all.length} total.`);
+console.log(`OK — 3 mocks (${mockCount} questions), ${DRILLS.length} drills, ${WEEK1_DAYS.length} daily sets, ${all.length} total.`);
