@@ -1,3 +1,4 @@
+import type { ChapterSection, StudyRead, Subject, SubjectChapter } from "@/features/study/types";
 import Dexie, { type Table } from "dexie";
 import type {
   Answer,
@@ -146,6 +147,11 @@ class SatDatabase extends Dexie {
   vocabProgress!: Table<VocabProgress, string>;
   drillAttempts!: Table<DrillAttempt, number>;
 
+  subjects!: Table<Subject, string>;
+  chapters!: Table<SubjectChapter, string>;
+  sections!: Table<ChapterSection, string>;
+  studyRead!: Table<StudyRead, string>;
+
   constructor() {
     super("sat-practice");
     this.version(1).stores({
@@ -171,6 +177,15 @@ class SatDatabase extends Dexie {
       detResponses: "id, task_id, prompt_id, created_at, _dirty",
       vocabProgress: "term, status",
       drillAttempts: "++id, pattern, at",
+    });
+
+    // v3 — study notes for school subjects. Additive only, like v2.
+    // studyRead is local-only: which sections she marked as understood.
+    this.version(3).stores({
+      subjects: "id, sort_order",
+      chapters: "id, subject_id, sort_order",
+      sections: "id, chapter_id, sort_order",
+      studyRead: "section_id",
     });
   }
 }

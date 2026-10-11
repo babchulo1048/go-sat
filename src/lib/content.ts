@@ -8,6 +8,7 @@ import type {
   Test,
   TestPart,
 } from "@/types/db";
+import type { ChapterSection, Subject, SubjectChapter } from "@/features/study/types";
 
 /**
  * Read-through cache for all question content.
@@ -130,6 +131,42 @@ export async function syncContent(
 
   await setMeta(META_KEYS.contentSyncedAt, Date.now());
   report(total, "Done");
+
+  // Separate and never-throwing: study notes must not be able to break the
+  // SAT content sync (e.g. before their migration has been run).
+  await syncStudyQuietly();
+}
+
+/**
+ * Pull study notes (subjects → chapters → sections) into IndexedDB.
+ * Replaced wholesale like other content, with the same thin-response guard.
+ */
+export async function syncStudy(): Promise<void> {
+  const [subjects, chapters, sections] = await Promise.all([
+    fetchAll<Subject>("subjects"),
+    fetchAll<SubjectChapter>("subject_chapters"),
+    fetchAll<ChapterSection>("chapter_sections"),
+  ]);
+  if (sections.length === 0 && (await db.sections.count()) > 0) {
+    throw new Error("Server returned no study sections; keeping the offline copy.");
+  }
+  await db.transaction("rw", [db.subjects, db.chapters, db.sections], async () => {
+    await Promise.all([db.subjects.clear(), db.chapters.clear(), db.sections.clear()]);
+    await Promise.all([
+      db.subjects.bulkPut(subjects),
+      db.chapters.bulkPut(chapters),
+      db.sections.bulkPut(sections),
+    ]);
+  });
+}
+
+export async function syncStudyQuietly(): Promise<void> {
+  if (!supabase || !navigator.onLine) return;
+  try {
+    await syncStudy();
+  } catch (err) {
+    console.warn("[content] study notes refresh failed", err);
+  }
 }
 
 export async function hasContent(): Promise<boolean> {
