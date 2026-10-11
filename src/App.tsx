@@ -26,6 +26,10 @@ import { NotFound } from "@/features/misc/NotFound";
  */
 const det = <K extends string>(name: K) =>
   lazy(() => import("@/features/det/pages").then((m) => ({ default: m[name as keyof typeof m] })));
+const study = <K extends string>(name: K) =>
+  lazy(() => import("@/features/study/pages").then((m) => ({ default: m[name as keyof typeof m] })));
+const StudyHome = study("StudyHome");
+const ChapterPage = study("ChapterPage");
 const DetHome = det("DetHome");
 const DetTaskPage = det("DetTaskPage");
 const DetWritingRunner = det("DetWritingRunner");
@@ -73,6 +77,8 @@ export default function App() {
                 </Suspense>
               }
             />
+            <Route path="/study" element={<Suspense fallback={lazyFallback}><StudyHome /></Suspense>} />
+            <Route path="/study/:chapterId" element={<Suspense fallback={lazyFallback}><ChapterPage /></Suspense>} />
             <Route path="/det" element={<Suspense fallback={lazyFallback}><DetHome /></Suspense>} />
             <Route path="/det/task/:taskId" element={<Suspense fallback={lazyFallback}><DetTaskPage /></Suspense>} />
             <Route path="/det/vocab" element={<Suspense fallback={lazyFallback}><VocabPage /></Suspense>} />

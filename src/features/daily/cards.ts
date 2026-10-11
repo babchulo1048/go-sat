@@ -18,7 +18,12 @@ export type Block =
   | { kind: "p"; text: string }
   | { kind: "steps"; items: string[] }
   | { kind: "bullets"; items: string[] }
-  | { kind: "rows"; rows: { left: string; right: string; use: string; never: string }[] };
+  | { kind: "rows"; rows: { left: string; right: string; use: string; never: string }[] }
+  // Used by the study notes (src/features/study):
+  | { kind: "formula"; text: string; note?: string }
+  | { kind: "table"; head: string[]; rows: string[][] }
+  | { kind: "callout"; tone: "idea" | "warn" | "book"; title?: string; text: string }
+  | { kind: "example"; title: string; steps: string[]; answer: string };
 
 export interface TeachingCard {
   minutes: number;
